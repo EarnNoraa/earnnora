@@ -1,55 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Earn Nora - USDT</title>
-    <!-- This is the official Telegram Script -->
-    <script src="https://telegram.org"></script>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #000; color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .logo { width: 120px; margin-top: 30px; }
-        h2 { color: #00ff88; margin-bottom: 5px; }
-        p { color: #888; font-size: 14px; margin-bottom: 30px; }
-        .card { background: #111; border: 1px solid #222; border-radius: 15px; width: 100%; padding: 15px; box-sizing: border-box; margin-bottom: 15px; cursor: pointer; transition: 0.2s; }
-        .card:active { transform: scale(0.98); background: #1a1a1a; }
-        .card h3 { margin: 0; font-size: 16px; color: #fff; }
-        .card span { color: #00ff88; font-size: 12px; }
-        .btn-main { background: #00ff88; color: black; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earn Nora</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    background: #000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.card {
+    background: #111;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.card.active {
+    border: 2px solid #00ff88;
+}
+
+button {
+    background: #00ff88;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: bold;
+}
+</style>
 </head>
+
 <body>
 
-    <img src="https://github.io" class="logo" alt="Nora Logo">
-    <h2>Earn Nora</h2>
-    <p>Invest USDT & Earn Daily Profit</p>
+<h2>Earn Nora Plans</h2>
 
-    <div class="card" onclick="selectPlan('0.5')">
-        <h3>Standard Plan</h3>
-        <span>0.5% Daily | Min: 10 USDT</span>
-    </div>
+<div class="card" onclick="selectPlan('Standard', '0.5', this)">
+    Standard Plan <br> 0.5% Daily
+</div>
 
-    <div class="card" onclick="selectPlan('1.0')">
-        <h3>Premium Plan</h3>
-        <span>1.0% Daily | Min: 500 USDT</span>
-    </div>
+<div class="card" onclick="selectPlan('Premium', '1.0', this)">
+    Premium Plan <br> 1.0% Daily
+</div>
 
-    <button class="btn-main" onclick="startInvesting()">CONTINUE</button>
+<button onclick="continueNow()">CONTINUE</button>
 
-    <script>
-        // Initialize Telegram WebApp
-        const tele = window.Telegram.WebApp;
-        tele.expand(); // Make the app full screen
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-        function selectPlan(rate) {
-            tele.HapticFeedback.impactOccurred('medium');
-            alert("Plan selected: " + rate + "% Daily");
-        }
+let selectedPlan = null;
 
-        function startInvesting() {
-            tele.MainButton.setText("PROCESSING...").show();
-            // This is where we will connect to your Python bot later
-        }
-    </script>
+function selectPlan(name, percent, el) {
+
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+
+    selectedPlan = {
+        plan: name,
+        percent: percent
+    };
+
+    tg.HapticFeedback.impactOccurred('medium');
+}
+
+function continueNow() {
+
+    if (!selectedPlan) {
+        tg.showAlert("Please select a plan first!");
+        return;
+    }
+
+    // Send data to Telegram bot
+    tg.sendData(JSON.stringify(selectedPlan));
+
+    tg.MainButton.setText("Processing...");
+    tg.MainButton.show();
+}
+</script>
+
 </body>
 </html>
