@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Earn Nora - USDT</title>
+    <!-- This is the official Telegram Script -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #000; color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .logo { width: 120px; margin-top: 30px; }
+        h2 { color: #00ff88; margin-bottom: 5px; }
+        p { color: #888; font-size: 14px; margin-bottom: 30px; }
+        .card { background: #111; border: 1px solid #222; border-radius: 15px; width: 100%; padding: 15px; box-sizing: border-box; margin-bottom: 15px; cursor: pointer; transition: 0.2s; }
+        .card:active { transform: scale(0.98); background: #1a1a1a; }
+        .card h3 { margin: 0; font-size: 16px; color: #fff; }
+        .card span { color: #00ff88; font-size: 12px; }
+        .btn-main { background: #00ff88; color: black; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 20px; }
+    </style>
+</head>
+<body>
 
+    <img src="https://github.io" class="logo" alt="Nora Logo">
+    <h2>Earn Nora</h2>
+    <p>Invest USDT & Earn Daily Profit</p>
+
+    <div class="card" onclick="selectPlan('0.5')">
+        <h3>Standard Plan</h3>
+        <span>0.5% Daily | Min: 10 USDT</span>
+    </div>
+
+    <div class="card" onclick="selectPlan('1.0')">
+        <h3>Premium Plan</h3>
+        <span>1.0% Daily | Min: 500 USDT</span>
+    </div>
+
+    <button class="btn-main" onclick="startInvesting()">CONTINUE</button>
+
+    <script>
+        // Initialize Telegram WebApp
+        const tele = window.Telegram.WebApp;
+        tele.expand(); // Make the app full screen
+
+        function selectPlan(rate) {
+            tele.HapticFeedback.impactOccurred('medium');
+            alert("Plan selected: " + rate + "% Daily");
+        }
+
+        function startInvesting() {
+            tele.MainButton.setText("PROCESSING...").show();
+            // This is where we will connect to your Python bot later
+        }
+    </script>
+</body>
+</html>
