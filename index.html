@@ -2,91 +2,266 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Earn Nora</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body {
-    font-family: Arial;
-    background: #000;
-    color: white;
-    text-align: center;
-    padding: 20px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-.card {
-    background: #111;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-    cursor: pointer;
-    border: 2px solid transparent;
+body{
+font-family:Arial,sans-serif;
+background:#050505;
+color:white;
+padding:18px;
 }
 
-.card.active {
-    border: 2px solid #00ff88;
+.header{
+background:#0d0d0d;
+padding:20px;
+border-radius:18px;
+margin-bottom:18px;
+box-shadow:0 0 15px rgba(255,255,255,.03);
 }
 
-button {
-    background: #00ff88;
-    border: none;
-    padding: 15px;
-    width: 100%;
-    border-radius: 10px;
-    font-weight: bold;
+.logo{
+font-size:28px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.green{
+color:#00ff88;
+}
+
+.balance{
+margin-top:14px;
+background:#151515;
+padding:18px;
+border-radius:14px;
+font-size:22px;
+font-weight:bold;
+}
+
+.section-title{
+margin:18px 0 12px;
+font-size:20px;
+font-weight:bold;
+}
+
+.plan{
+background:#111;
+border:2px solid transparent;
+border-radius:16px;
+padding:18px;
+margin-bottom:12px;
+cursor:pointer;
+transition:.2s;
+}
+
+.plan.active{
+border-color:#00ff88;
+background:#171717;
+}
+
+.plan h3{
+margin-bottom:8px;
+}
+
+.profit{
+color:#00ff88;
+font-weight:bold;
+}
+
+.input-box{
+background:#111;
+padding:15px;
+border-radius:14px;
+margin-top:15px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#1c1c1c;
+color:white;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+margin-top:18px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.deposit-btn{
+background:#2d2dff;
+color:white;
+}
+
+.invest-btn{
+background:#00ff88;
+color:black;
+}
+
+.small{
+opacity:.7;
+font-size:13px;
+margin-top:6px;
 }
 </style>
 </head>
-
 <body>
 
-<h2>Earn Nora Plans</h2>
+<div class="header">
+<div class="logo">Earn <span class="green">Nora</span></div>
+<div>Invest USDT & Grow Daily</div>
 
-<div class="card" onclick="selectPlan('Standard', '0.5', this)">
-    Standard Plan <br> 0.5% Daily
+<div class="balance">
+Balance: <span id="bal">0.00</span> USDT
+</div>
 </div>
 
-<div class="card" onclick="selectPlan('Premium', '1.0', this)">
-    Premium Plan <br> 1.0% Daily
+<div class="section-title">Choose Plan</div>
+
+<div class="plan" onclick="selectPlan('Starter','0.5',10,this)">
+<h3>Starter Plan</h3>
+<div class="profit">0.5% Daily</div>
+<div class="small">Minimum: 10 USDT</div>
 </div>
 
-<button onclick="continueNow()">CONTINUE</button>
+<div class="plan" onclick="selectPlan('Premium','1.0',500,this)">
+<h3>Premium Plan</h3>
+<div class="profit">1.0% Daily</div>
+<div class="small">Minimum: 500 USDT</div>
+</div>
+
+<div class="plan" onclick="selectPlan('VIP','2.0',2000,this)">
+<h3>VIP Plan</h3>
+<div class="profit">2.0% Daily</div>
+<div class="small">Minimum: 2000 USDT</div>
+</div>
+
+<div class="input-box">
+Deposit Amount (USDT)
+<input id="amount" type="number" placeholder="Enter amount">
+
+<button class="deposit-btn" onclick="fakeDeposit()">
+Deposit Balance
+</button>
+
+<button class="invest-btn" onclick="investNow()">
+Invest Now
+</button>
+</div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-let selectedPlan = null;
+let selectedPlan=null;
+let balance=0;
 
-function selectPlan(name, percent, el) {
-
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-
-    selectedPlan = {
-        plan: name,
-        percent: percent
-    };
-
-    tg.HapticFeedback.impactOccurred('medium');
+function updateBalance(){
+document.getElementById('bal').innerText=
+balance.toFixed(2);
 }
 
-function continueNow() {
+function selectPlan(name,profit,min,el){
+document.querySelectorAll('.plan').forEach(p=>
+p.classList.remove('active')
+);
 
-    if (!selectedPlan) {
-        tg.showAlert("Please select a plan first!");
-        return;
-    }
+el.classList.add('active');
 
-    // Send data to Telegram bot
-    tg.sendData(JSON.stringify(selectedPlan));
+selectedPlan={
+plan:name,
+percent:profit,
+minimum:min
+};
 
-    tg.MainButton.setText("Processing...");
-    tg.MainButton.show();
+tg.HapticFeedback.impactOccurred('medium');
 }
+
+function fakeDeposit(){
+let amt=parseFloat(
+document.getElementById('amount').value
+);
+
+if(!amt || amt<=0){
+tg.showAlert('Enter valid deposit amount');
+return;
+}
+
+balance+=amt;
+updateBalance();
+
+tg.showAlert('Deposit added successfully');
+}
+
+function investNow(){
+if(!selectedPlan){
+tg.showAlert('Select a plan first');
+return;
+}
+
+let amt=parseFloat(
+document.getElementById('amount').value
+);
+
+if(!amt || amt < selectedPlan.minimum){
+tg.showAlert(
+'Minimum for '+selectedPlan.plan+
+' is '+selectedPlan.minimum+' USDT'
+);
+return;
+}
+
+if(amt>balance){
+tg.showAlert('Insufficient balance');
+return;
+}
+
+balance-=amt;
+updateBalance();
+
+let investmentData={
+action:'invest',
+plan:selectedPlan.plan,
+profit:selectedPlan.percent,
+amount:amt,
+new_balance:balance
+};
+
+// sends to Telegram bot
+
+tg.sendData(
+JSON.stringify(investmentData)
+);
+
+tg.MainButton.setText('INVESTMENT SENT');
+tg.MainButton.show();
+
+tg.showAlert(
+'Investment submitted successfully!'
+);
+}
+
+updateBalance();
 </script>
 
 </body>
 </html>
+
