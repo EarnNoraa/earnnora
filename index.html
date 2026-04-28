@@ -1,5 +1,167 @@
-<div id="depositModal"
-style="
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Earn Nora AI</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial;
+background:#050814;
+color:white;
+padding:18px 18px 90px;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.logo{
+font-size:34px;
+font-weight:bold;
+}
+
+.logo span{
+color:#00ff88;
+}
+
+.notify{
+background:#11192d;
+padding:12px 16px;
+border-radius:50px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-bottom:20px;
+}
+
+.card{
+background:#0d1324;
+padding:18px;
+border-radius:18px;
+text-align:center;
+}
+
+.card h2{
+color:#00ff88;
+margin-bottom:8px;
+}
+
+.deposit-box{
+background:linear-gradient(
+90deg,#2a1c10,#1b1220
+);
+padding:20px;
+border-radius:24px;
+margin-bottom:25px;
+}
+
+.progress{
+height:8px;
+background:#222;
+border-radius:30px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.bar{
+height:100%;
+width:40%;
+background:#00ff88;
+}
+
+.section{
+margin-top:25px;
+font-size:22px;
+font-weight:bold;
+}
+
+.assets{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:18px;
+}
+
+.asset{
+background:#0d1324;
+padding:18px;
+border-radius:18px;
+text-align:center;
+border:2px solid transparent;
+cursor:pointer;
+}
+
+.asset.active{
+border-color:#00ff88;
+}
+
+.coin{
+font-size:28px;
+margin-bottom:8px;
+}
+
+.amountBox{
+margin-top:20px;
+}
+
+.amountBox input{
+width:100%;
+padding:16px;
+background:#11192d;
+border:none;
+border-radius:14px;
+color:white;
+margin-top:12px;
+}
+
+.depositBtn{
+width:100%;
+padding:18px;
+margin-top:18px;
+border:none;
+border-radius:16px;
+background:#00ff88;
+color:black;
+font-size:18px;
+font-weight:bold;
+}
+
+.bottomnav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#08101e;
+display:flex;
+justify-content:space-around;
+padding:18px;
+font-size:24px;
+}
+
+
+
+/* Deposit Modal */
+
+#depositModal{
 display:none;
 position:fixed;
 top:0;
@@ -9,49 +171,177 @@ height:100%;
 background:#050814;
 z-index:9999;
 padding:25px;
-">
+overflow:auto;
+}
 
-<h2>Deposit USDT</h2>
-
-<div style="
+.walletBox{
 background:#0d1324;
 padding:25px;
 border-radius:24px;
-margin-top:20px;
+margin-top:25px;
 text-align:center;
-">
+}
 
-<!-- QR generated from your wallet -->
-<img
-src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=YOUR_WALLET_ADDRESS"
-style="
+.qr{
 width:220px;
 background:white;
 padding:10px;
 border-radius:18px;
-"
-/>
-
-
-<p style="
 margin-top:20px;
-color:#aaa;
-">
-Send payment to:
-</p>
+}
 
-
-<div style="
+.walletAddr{
 background:#11192d;
 padding:15px;
+margin-top:20px;
 border-radius:14px;
-margin-top:15px;
 word-break:break-all;
 color:#00ff88;
 font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div class="top">
+<div class="logo">
+Earn<span>Nora</span> AI
+</div>
+
+<div class="notify">
+🔔
+</div>
+</div>
+
+
+<div class="stats">
+
+<div class="card">
+<h2>$2.4M+</h2>
+Paid Out
+</div>
+
+<div class="card">
+<h2>861+</h2>
+Users
+</div>
+
+<div class="card">
+<h2>67%</h2>
+Win Rate
+</div>
+
+</div>
+
+
+<div class="deposit-box">
+
+💰 Deposit 30 USDT Unlock Bonus
+
+<div class="progress">
+<div class="bar"></div>
+</div>
+
+<div style="margin-top:12px">
+12 / 30 USDT Progress
+</div>
+
+</div>
+
+
+
+<div class="section">
+Select Asset
+</div>
+
+
+<div class="assets">
+
+<div class="asset active">
+<div class="coin">₮</div>
+USDT
+</div>
+
+<div class="asset">
+<div class="coin">₿</div>
+BTC
+</div>
+
+<div class="asset">
+<div class="coin">Ξ</div>
+ETH
+</div>
+
+<div class="asset">
+<div class="coin">◎</div>
+SOL
+</div>
+
+<div class="asset">
+<div class="coin">BNB</div>
+BNB
+</div>
+
+<div class="asset">
+<div class="coin">TRX</div>
+TRON
+</div>
+
+</div>
+
+
+
+<div class="amountBox">
+Deposit Amount
+
+<input
+id="amount"
+type="number"
+value="30">
+</div>
+
+
+
+<button
+class="depositBtn"
+onclick="depositNow()">
+DEPOSIT NOW
+</button>
+
+
+
+
+<!-- Deposit Popup -->
+
+<div id="depositModal">
+
+<h2>
+Deposit Crypto
+</h2>
+
+<div class="walletBox">
+
+<div style="
+color:#00ff88;
+font-weight:bold;
 ">
+✓ Send To This Wallet
+</div>
+
+
+<img
+class="qr"
+src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9"
+/>
+
+
+<div class="walletAddr">
 0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9
 </div>
+
 
 
 <button
@@ -60,11 +350,13 @@ onclick="copyAddr()">
 COPY ADDRESS
 </button>
 
+
 <button
 class="depositBtn"
 onclick="confirmPaid()">
 I PAID
 </button>
+
 
 <button
 class="depositBtn"
@@ -72,6 +364,137 @@ onclick="closeModal()">
 CLOSE
 </button>
 
+
 </div>
 
 </div>
+
+
+
+
+<div class="bottomnav">
+🏠
+📈
+💼
+👥
+⚙️
+</div>
+
+
+
+<script>
+
+const tg=window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+let selectedAsset="USDT";
+
+
+document.querySelectorAll(
+".asset"
+).forEach(a=>{
+
+a.onclick=function(){
+
+document.querySelectorAll(
+".asset"
+).forEach(
+x=>x.classList.remove(
+"active"
+)
+);
+
+this.classList.add(
+"active"
+);
+
+selectedAsset=
+this.innerText.trim();
+
+};
+
+});
+
+
+
+function depositNow(){
+
+let amount=
+document.getElementById(
+"amount"
+).value;
+
+
+if(!amount || amount<=0){
+
+alert(
+"Enter amount"
+);
+
+return;
+
+}
+
+document.getElementById(
+"depositModal"
+).style.display="block";
+
+}
+
+
+
+function closeModal(){
+
+document.getElementById(
+"depositModal"
+).style.display="none";
+
+}
+
+
+
+function copyAddr(){
+
+navigator.clipboard.writeText(
+"0xf1D8711cBDb90dc4eF4cb0E9194c768dCF14A3A1"
+);
+
+alert(
+"Wallet copied"
+);
+
+}
+
+
+
+function confirmPaid(){
+
+let amount=
+document.getElementById(
+"amount"
+).value;
+
+
+tg.sendData(
+JSON.stringify({
+action:"deposit_check",
+asset:selectedAsset,
+amount:amount
+})
+);
+
+
+alert(
+"Payment submitted for verification"
+);
+
+closeModal();
+
+}
+
+</script>
+
+</body>
+</html>
