@@ -1,500 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>Earn Nora AI</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:Arial; background:#050814; color:white; padding:18px 18px 90px; }
+        
+        .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; }
+        .logo { font-size:34px; font-weight:bold; }
+        .logo span { color:#00ff88; }
+        .notify { background:#11192d; padding:12px 16px; border-radius:50px; }
 
-<title>Earn Nora AI</title>
+        .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
+        .card { background:#0d1324; padding:18px; border-radius:18px; text-align:center; }
+        .card h2 { color:#00ff88; margin-bottom:8px; font-size: 18px; }
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+        /* The Progress Bar you wanted back */
+        .deposit-box { background:linear-gradient(90deg,#2a1c10,#1b1220); padding:20px; border-radius:24px; margin-bottom:25px; }
+        .progress { height:8px; background:#222; border-radius:30px; overflow:hidden; margin-top:15px; }
+        .bar { height:100%; width:0%; background:#00ff88; transition: 0.5s; }
 
-<style>
+        .section { margin-top:25px; font-size:22px; font-weight:bold; }
+        .assets { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; }
+        .asset { background:#0d1324; padding:18px; border-radius:18px; text-align:center; border:2px solid transparent; cursor:pointer; }
+        .asset.active { border-color:#00ff88; }
+        .coin { font-size:28px; margin-bottom:8px; }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        .amountBox { margin-top:20px; }
+        .amountBox input { width:100%; padding:16px; background:#11192d; border:none; border-radius:14px; color:white; margin-top:12px; font-size: 16px; }
+        .depositBtn { width:100%; padding:18px; margin-top:18px; border:none; border-radius:16px; background:#00ff88; color:black; font-size:18px; font-weight:bold; cursor:pointer; }
 
-body{
-font-family:Arial;
-background:#050814;
-color:white;
-padding:18px 18px 90px;
-}
+        .bottomnav { position:fixed; bottom:0; left:0; right:0; background:#08101e; display:flex; justify-content:space-around; padding:18px; font-size:24px; border-top: 1px solid #11192d; }
 
-.top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-.logo{
-font-size:34px;
-font-weight:bold;
-}
-
-.logo span{
-color:#00ff88;
-}
-
-.notify{
-background:#11192d;
-padding:12px 16px;
-border-radius:50px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-margin-bottom:20px;
-}
-
-.card{
-background:#0d1324;
-padding:18px;
-border-radius:18px;
-text-align:center;
-}
-
-.card h2{
-color:#00ff88;
-margin-bottom:8px;
-}
-
-.deposit-box{
-background:linear-gradient(
-90deg,#2a1c10,#1b1220
-);
-padding:20px;
-border-radius:24px;
-margin-bottom:25px;
-}
-
-.progress{
-height:8px;
-background:#222;
-border-radius:30px;
-overflow:hidden;
-margin-top:15px;
-}
-
-.bar{
-height:100%;
-width:40%;
-background:#00ff88;
-}
-
-.section{
-margin-top:25px;
-font-size:22px;
-font-weight:bold;
-}
-
-.assets{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:18px;
-}
-
-.asset{
-background:#0d1324;
-padding:18px;
-border-radius:18px;
-text-align:center;
-border:2px solid transparent;
-cursor:pointer;
-}
-
-.asset.active{
-border-color:#00ff88;
-}
-
-.coin{
-font-size:28px;
-margin-bottom:8px;
-}
-
-.amountBox{
-margin-top:20px;
-}
-
-.amountBox input{
-width:100%;
-padding:16px;
-background:#11192d;
-border:none;
-border-radius:14px;
-color:white;
-margin-top:12px;
-}
-
-.depositBtn{
-width:100%;
-padding:18px;
-margin-top:18px;
-border:none;
-border-radius:16px;
-background:#00ff88;
-color:black;
-font-size:18px;
-font-weight:bold;
-}
-
-.bottomnav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#08101e;
-display:flex;
-justify-content:space-around;
-padding:18px;
-font-size:24px;
-}
-
-
-
-/* Deposit Modal */
-
-#depositModal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#050814;
-z-index:9999;
-padding:25px;
-overflow:auto;
-}
-
-.walletBox{
-background:#0d1324;
-padding:25px;
-border-radius:24px;
-margin-top:25px;
-text-align:center;
-}
-
-.qr{
-width:220px;
-background:white;
-padding:10px;
-border-radius:18px;
-margin-top:20px;
-}
-
-.walletAddr{
-background:#11192d;
-padding:15px;
-margin-top:20px;
-border-radius:14px;
-word-break:break-all;
-color:#00ff88;
-font-size:14px;
-}
-
-</style>
+        #depositModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#050814; z-index:9999; padding:25px; overflow:auto; text-align: center; }
+        .walletBox { background:#0d1324; padding:25px; border-radius:24px; margin-top:25px; }
+        .qr { width:220px; background:white; padding:10px; border-radius:18px; margin-top:20px; }
+        .walletAddr { background:#11192d; padding:15px; margin-top:20px; border-radius:14px; word-break:break-all; color:#00ff88; font-size:14px; }
+    </style>
 </head>
-
 <body>
 
-
 <div class="top">
-<div class="logo">
-Earn<span>Nora</span> AI
+    <div class="logo">Earn<span>Nora</span> AI</div>
+    <div class="notify">🔔</div>
 </div>
-
-<div class="notify">
-🔔
-</div>
-</div>
-
 
 <div class="stats">
-
-<div class="card">
-<h2>$2.4M+</h2>
-Paid Out
+    <div class="card"><h2 id="realBal">$0.00</h2>Balance</div>
+    <div class="card"><h2 id="realInv">$0.00</h2>Invested</div>
+    <div class="card"><h2>67%</h2>Win Rate</div>
 </div>
 
-<div class="card">
-<h2>861+</h2>
-Users
-</div>
-
-<div class="card">
-<h2>67%</h2>
-Win Rate
-</div>
-
-</div>
-
-
+<!-- Re-added your Progress Box exactly as it was -->
 <div class="deposit-box">
-
-💰 Deposit 30 USDT Unlock Bonus
-
-<div class="progress">
-<div class="bar"></div>
+    💰 Deposit 30 USDT Unlock Bonus
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div style="margin-top:12px" id="progressStatus">
+        0 / 30 USDT Progress
+    </div>
 </div>
 
-<div style="margin-top:12px">
-12 / 30 USDT Progress
-</div>
-
-</div>
-
-
-
-<div class="section">
-Select Asset
-</div>
-
-
+<div class="section">Select Asset</div>
 <div class="assets">
-
-<div class="asset active">
-<div class="coin">₮</div>
-USDT
+    <div class="asset active" onclick="setAsset('USDT')"><div class="coin">₮</div>USDT</div>
+    <div class="asset" onclick="setAsset('BTC')"><div class="coin">₿</div>BTC</div>
+    <div class="asset" onclick="setAsset('ETH')"><div class="coin">Ξ</div>ETH</div>
 </div>
-
-<div class="asset">
-<div class="coin">₿</div>
-BTC
-</div>
-
-<div class="asset">
-<div class="coin">Ξ</div>
-ETH
-</div>
-
-<div class="asset">
-<div class="coin">◎</div>
-SOL
-</div>
-
-<div class="asset">
-<div class="coin">BNB</div>
-BNB
-</div>
-
-<div class="asset">
-<div class="coin">TRX</div>
-TRON
-</div>
-
-</div>
-
-
 
 <div class="amountBox">
-Deposit Amount
-
-<input
-id="amount"
-type="number"
-value="30">
+    Deposit Amount
+    <input id="amount" type="number" value="30">
 </div>
 
-
-
-<button
-class="depositBtn"
-onclick="depositNow()">
-DEPOSIT NOW
-</button>
-
-
-
-
-<!-- Deposit Popup -->
+<button class="depositBtn" onclick="depositNow()">DEPOSIT NOW</button>
+<button class="depositBtn" style="background:#222; color:white; border:1px solid #00ff88;" onclick="investNow()">INVEST BALANCE</button>
 
 <div id="depositModal">
-
-<h2>
-Deposit Crypto
-</h2>
-
-<div class="walletBox">
-
-<div style="
-color:#00ff88;
-font-weight:bold;
-">
-✓ Send To This Wallet
+    <h2>Deposit Crypto</h2>
+    <div class="walletBox">
+        <div style="color:#00ff88; font-weight:bold;">✓ Send To This Wallet</div>
+        <img class="qr" src="https://qrserver.com" />
+        <div class="walletAddr" id="addrText">0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9</div>
+        <button class="depositBtn" onclick="copyAddr()">COPY ADDRESS</button>
+        <button class="depositBtn" onclick="confirmPaid()">I PAID</button>
+        <button class="depositBtn" style="background:#333; color:white;" onclick="closeModal()">CLOSE</button>
+    </div>
 </div>
 
-
-<img
-class="qr"
-src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9"
-/>
-
-
-<div class="walletAddr">
-0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9
-</div>
-
-
-
-<button
-class="depositBtn"
-onclick="copyAddr()">
-COPY ADDRESS
-</button>
-
-
-<button
-class="depositBtn"
-onclick="confirmPaid()">
-I PAID
-</button>
-
-
-<button
-class="depositBtn"
-onclick="closeModal()">
-CLOSE
-</button>
-
-
-</div>
-
-</div>
-
-
-
-
-<div class="bottomnav">
-🏠
-📈
-💼
-👥
-⚙️
-</div>
-
-
+<div class="bottomnav">🏠 📈 💼 👥 ⚙️</div>
 
 <script>
-
-const tg=window.Telegram.WebApp;
-
+const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-let selectedAsset="USDT";
+const userId = tg.initDataUnsafe.user.id;
+let selectedAsset = "USDT";
 
+// MUST UPDATE THIS WITH YOUR PC IP (from ipconfig)
+const BACKEND_URL = "http://ip.address";
 
-document.querySelectorAll(
-".asset"
-).forEach(a=>{
-
-a.onclick=function(){
-
-document.querySelectorAll(
-".asset"
-).forEach(
-x=>x.classList.remove(
-"active"
-)
-);
-
-this.classList.add(
-"active"
-);
-
-selectedAsset=
-this.innerText.trim();
-
-};
-
-});
-
-
-
-function depositNow(){
-
-let amount=
-document.getElementById(
-"amount"
-).value;
-
-
-if(!amount || amount<=0){
-
-alert(
-"Enter amount"
-);
-
-return;
-
+function fetchUserData() {
+    fetch(`${BACKEND_URL}/api/user/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+            // Update Numbers
+            document.getElementById('realBal').innerText = `$${data.balance.toFixed(2)}`;
+            document.getElementById('realInv').innerText = `$${data.invested.toFixed(2)}`;
+            
+            // Update Progress Bar (Target 30 USDT)
+            let currentBal = data.balance;
+            let target = 30;
+            let percent = (currentBal / target) * 100;
+            
+            document.getElementById('progressBar').style.width = (percent > 100 ? 100 : percent) + "%";
+            document.getElementById('progressStatus').innerText = `${currentBal.toFixed(1)} / ${target} USDT Progress`;
+        })
+        .catch(err => console.log("Check your Python script and IP!"));
 }
 
-document.getElementById(
-"depositModal"
-).style.display="block";
-
+function setAsset(name) {
+    selectedAsset = name;
+    document.querySelectorAll('.asset').forEach(a => a.classList.remove('active'));
+    event.currentTarget.classList.add('active');
 }
 
+function depositNow() { document.getElementById("depositModal").style.display = "block"; }
+function closeModal() { document.getElementById("depositModal").style.display = "none"; }
 
-
-function closeModal(){
-
-document.getElementById(
-"depositModal"
-).style.display="none";
-
+function investNow() {
+    let amt = document.getElementById("amount").value;
+    tg.sendData(JSON.stringify({ action: "invest", amount: amt }));
 }
 
-
-
-function copyAddr(){
-
-navigator.clipboard.writeText(
-"0xf1D8711cBDb90dc4eF4cb0E9194c768dCF14A3A1"
-);
-
-alert(
-"Wallet copied"
-);
-
+function confirmPaid() {
+    let amt = document.getElementById("amount").value;
+    tg.sendData(JSON.stringify({ action: "deposit_check", asset: selectedAsset, amount: amt }));
 }
 
-
-
-function confirmPaid(){
-
-let amount=
-document.getElementById(
-"amount"
-).value;
-
-
-tg.sendData(
-JSON.stringify({
-action:"deposit_check",
-asset:selectedAsset,
-amount:amount
-})
-);
-
-
-alert(
-"Payment submitted for verification"
-);
-
-closeModal();
-
+function copyAddr() {
+    navigator.clipboard.writeText(document.getElementById('addrText').innerText);
+    tg.showAlert("Address Copied!");
 }
 
+// Initial load and sync every 5 seconds
+fetchUserData();
+setInterval(fetchUserData, 5000);
 </script>
-
 </body>
 </html>
